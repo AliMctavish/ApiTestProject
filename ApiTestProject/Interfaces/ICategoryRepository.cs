@@ -4,11 +4,14 @@ namespace ApiTestProject.Interfaces
 {
     public interface ICategoryRepository
     {
-        ICollection<Category> GetCategories();
-        Category GetCategory(int id);
+        Task<ICollection<Category>> GetCategories();
+        public Task<Category> GetCategory(int id);
 
-        ICollection<BlogPost> GetBlogPosts();
+        public Task<Category> CreateCategory();
 
+        public Task<ICollection<BlogPost>> GetBlogPosts();
+
+        public Task<Category> DeleteCategory(int id);
         bool isCategoryExist(int id);
     }
 }

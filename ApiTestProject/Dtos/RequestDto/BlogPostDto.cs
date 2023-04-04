@@ -6,7 +6,7 @@ namespace ApiTestProject.Dtos.RequestDto
     {
         public string title { get; set; }
         public string description { get; set; }
-        public Category CategoryId { get; set; }
+        public int CategoryId { get; set; }
 
 
     }

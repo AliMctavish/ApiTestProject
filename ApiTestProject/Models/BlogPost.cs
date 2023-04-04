@@ -8,7 +8,9 @@ namespace ApiTestProject.Models
 
         public string description { get; set; }
         public DateTime CreatedDate { get; set; }
-        public Category CategoryId { get; set; }
+        public int CategoryId {get; set;}
+        public Category Category { get; set; }
+        
 
     }
 

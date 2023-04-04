@@ -27,23 +27,24 @@ namespace ApiTestProject.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BlogPost>>> GetBlogPosts()
         {
-          if (_context.BlogPosts == null)
+          if (_context.Posts == null)
           {
               return BadRequest("empty");
           }
-            return Ok("fuck");
-           // return await _context.BlogPosts.ToListAsync();
+          var blogPosts = await _context.Posts.ToListAsync();
+            Console.WriteLine(blogPosts);
+            return blogPosts;
         }
 
-        // GET: api/BlogBlogPosts/5
+        // GET: api/BlogPosts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<BlogPost>> GetBlogPost(int id)
         {
-          if (_context.BlogPosts == null)
+          if (_context.Posts == null)
           {
               return NotFound();
           }
-            var blogPost = await _context.BlogPosts.FindAsync(id);
+            var blogPost = await _context.Posts.FindAsync(id);
 
             if (blogPost == null)
             {
@@ -53,7 +54,7 @@ namespace ApiTestProject.Controllers
             return blogPost;
         }
 
-        // PUT: api/BlogPosts/5
+        // PUT: api/Posts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutBlogPost(int id, BlogPost blogPost)
@@ -84,38 +85,38 @@ namespace ApiTestProject.Controllers
             return NoContent();
         }
 
-        // POST: api/BlogPosts
+        // POST: api/Posts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<BlogPost>> PostBlogPost(BlogPostDto blogPost)
         {
-          if (_context.BlogPosts == null)
+          if (_context.Posts == null)
           {
-              return Problem("Entity set 'DataContext.BlogPosts'  is null.");
+              return Problem("Entity set 'DataContext.Posts'  is null.");
           }
             var model = new BlogPost() { title = blogPost.title, description = blogPost.description , CategoryId = blogPost.CategoryId};
 
-            _context.BlogPosts.Add(model);
+            _context.Posts.Add(model);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetBlogPost", new { id = model.Id }, blogPost);
         }
 
-        // DELETE: api/BlogBlogPosts/5
+        // DELETE: api/BlogPosts/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBlogPost(int id)
         {
-            if (_context.BlogPosts == null)
+            if (_context.Posts == null)
             {
                 return NotFound();
             }
-            var blogPost = await _context.BlogPosts.FindAsync(id);
+            var blogPost = await _context.Posts.FindAsync(id);
             if (blogPost == null)
             {
                 return NotFound();
             }
 
-            _context.BlogPosts.Remove(blogPost);
+            _context.Posts.Remove(blogPost);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -123,7 +124,7 @@ namespace ApiTestProject.Controllers
 
         private bool BlogPostExists(int id)
         {
-            return (_context.BlogPosts?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Posts?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

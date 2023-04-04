@@ -1,6 +1,7 @@
 ﻿using ApiTestProject.Data;
 using ApiTestProject.Interfaces;
 using ApiTestProject.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApiTestProject.Repository
 {
@@ -11,32 +12,32 @@ namespace ApiTestProject.Repository
         {
             _context = context;
         }
-
-        public ICollection<Category> GetCategories()
+        public async Task<ICollection<Category>> GetCategories()
         {
-            return _context.Categories.OrderBy(x => x.Id).ToList();
+            return await _context.Categories.OrderBy(x => x.Id).ToListAsync();
         }
-
-        public Category GetCategory(int id)
+        public async Task<Category> GetCategory(int id)
         {
-            return _context.Categories.FirstOrDefault(x => x.Id == id);
-        }
+          
+            var category = await _context.Categories.SingleOrDefaultAsync(x => x.Id == id);
 
-        public ICollection<BlogPost> GetBlogPosts()
+            return category;
+        }
+        public async Task<ICollection<BlogPost>> GetBlogPosts()
         {
-            return _context.BlogPosts.OrderBy(x => x.Id).ToList();
+            var blogPost = await _context.Posts.OrderBy(x => x.Id).ToListAsync();
+
+            return blogPost;
         }
+        public async Task<Category> DeleteCategory(int id)
+        {
+            var category = await _context.Categories.SingleOrDefaultAsync(x => x.Id == id);
 
-
-
+            return category;
+        }
         public bool isCategoryExist(int id)
         {
             return false;
         }
-
-
-
-
-
     }
 }

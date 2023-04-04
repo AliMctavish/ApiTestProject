@@ -4,6 +4,13 @@ namespace ApiTestProject.Interfaces
 {
     public interface IBlogPostRepository
     {
-       public  ICollection<BlogPost> GetBlogPosts();
+        public  Task<ICollection<BlogPost>> GetBlogPosts();
+        public Task<BlogPost> GetBlogPost(int id);
+
+        public Task<BlogPost> UpdateBlogPost(int id);
+
+        public Task DeleteBlogPost(int id);
+
+        public bool isBlogPostExist(int id);
     }
 }

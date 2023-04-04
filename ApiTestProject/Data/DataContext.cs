@@ -1,9 +1,11 @@
 ﻿using ApiTestProject.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+//using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ApiTestProject.Data
 {
-    public class DataContext : DbContext
+    public class DataContext :  IdentityDbContext
     {
         public DataContext(DbContextOptions<DataContext> options): base(options)
         {
@@ -15,8 +17,12 @@ namespace ApiTestProject.Data
 
         public DbSet<Category> Categories { get; set; }
 
-        public DbSet<BlogPost> BlogPosts { get; set; }
-        
+        public DbSet<BlogPost> Posts { get; set; }
 
+        //protected override void OnModelCreation(ModelBuilder builder)
+        //{
+            
+
+        //}
     }
 }
