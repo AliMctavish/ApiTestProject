@@ -6,6 +6,7 @@ namespace ApiTestProject.Interfaces
     {
         public  Task<ICollection<BlogPost>> GetBlogPosts();
         public Task<BlogPost> GetBlogPost(int id);
+       // public Task<BlogPost> CreateBlogPost();
 
         public Task<BlogPost> UpdateBlogPost(int id);
 

@@ -1,6 +1,8 @@
 using ApiTestProject.Data;
 using Microsoft.EntityFrameworkCore;
 using ApiTestProject.Controllers;
+using ApiTestProject.Interfaces;
+using ApiTestProject.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<ICategoryRepository,CategoryRepository >();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddDbContext<DataContext>(options =>

@@ -7,7 +7,7 @@ namespace ApiTestProject.Interfaces
         Task<ICollection<Category>> GetCategories();
         public Task<Category> GetCategory(int id);
 
-        public Task<Category> CreateCategory();
+      //  public Task<Category> CreateCategory();
 
         public Task<ICollection<BlogPost>> GetBlogPosts();
 

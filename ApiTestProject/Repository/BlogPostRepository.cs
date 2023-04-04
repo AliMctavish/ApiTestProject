@@ -22,11 +22,11 @@ namespace ApiTestProject.Repository
             return blogPosts;
         }
 
-        Task<BlogPost> IBlogPostRepository.CreateBlogPost()
-        {
+        //Task<BlogPost> IBlogPostRepository.CreateBlogPost()
+        //{
 
-            return 
-        }
+        //    return 
+        //}
 
         Task IBlogPostRepository.DeleteBlogPost(int id)
         {

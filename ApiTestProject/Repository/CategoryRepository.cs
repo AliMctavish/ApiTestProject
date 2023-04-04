@@ -1,4 +1,5 @@
 ﻿using ApiTestProject.Data;
+using ApiTestProject.Dtos.RequestDto;
 using ApiTestProject.Interfaces;
 using ApiTestProject.Models;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,12 @@ namespace ApiTestProject.Repository
         {
             _context = context;
         }
+
+        //public async Task<Category> CreateCategory(CategoryCreateDto categoryDto)
+        //{
+        //    var model = new Category() { }
+        //    return await _context.Categories.Add();
+        //}
         public async Task<ICollection<Category>> GetCategories()
         {
             return await _context.Categories.OrderBy(x => x.Id).ToListAsync();
