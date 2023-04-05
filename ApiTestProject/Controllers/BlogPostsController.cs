@@ -90,9 +90,18 @@ namespace ApiTestProject.Controllers
         [HttpPost]
         public async Task<ActionResult<BlogPost>> PostBlogPost(BlogPostDto blogPost)
         {
-          if (_context.Posts == null)
-          {
-              return Problem("Entity set 'DataContext.Posts'  is null.");
+            bool isIn = false;
+            foreach (var category in _context.Categories.ToList())
+            {
+                if (category.Id == blogPost.CategoryId)
+                {
+                    isIn = true;
+                    break;
+                }
+            }
+            if (_context.Categories.Where(x => x.Id == blogPost.CategoryId).SingleOrDefault() == null)
+            {
+              return Problem("Entity set 'DataContext.category with id'  is null.");
           }
             var model = new BlogPost() { title = blogPost.title, description = blogPost.description , CategoryId = blogPost.CategoryId};
 

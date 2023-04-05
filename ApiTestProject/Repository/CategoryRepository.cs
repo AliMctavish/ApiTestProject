@@ -3,12 +3,13 @@ using ApiTestProject.Dtos.RequestDto;
 using ApiTestProject.Interfaces;
 using ApiTestProject.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Xml;
 
 namespace ApiTestProject.Repository
 {
     public class CategoryRepository : ICategoryRepository   
     {
-        DataContext _context;
+        private readonly DataContext _context;
         public CategoryRepository(DataContext context) 
         {
             _context = context;
@@ -19,15 +20,14 @@ namespace ApiTestProject.Repository
         //    var model = new Category() { }
         //    return await _context.Categories.Add();
         //}
-        public async Task<ICollection<Category>> GetCategories()
+        public async Task<List<Category>> GetCategories()
         {
-            return await _context.Categories.OrderBy(x => x.Id).ToListAsync();
+           var list = await _context.Categories.ToListAsync();    
+           return list;          
         }
         public async Task<Category> GetCategory(int id)
         {
-          
             var category = await _context.Categories.SingleOrDefaultAsync(x => x.Id == id);
-
             return category;
         }
         public async Task<ICollection<BlogPost>> GetBlogPosts()
@@ -36,15 +36,22 @@ namespace ApiTestProject.Repository
 
             return blogPost;
         }
-        public async Task<Category> DeleteCategory(int id)
+        public async Task<bool> DeleteCategory(int id)
         {
             var category = await _context.Categories.SingleOrDefaultAsync(x => x.Id == id);
 
-            return category;
+            _context.Categories.Remove(category);
+
+            var result = _context.SaveChanges();
+
+
+            return true;
         }
         public bool isCategoryExist(int id)
         {
             return false;
         }
+
+  
     }
 }

@@ -12,6 +12,7 @@ using AutoMapper;
 using ApiTestProject.Repository;
 using Microsoft.AspNetCore.Identity;
 using ApiTestProject.Interfaces;
+using System.Diagnostics;
 
 namespace ApiTestProject.Controllers
 {
@@ -23,40 +24,48 @@ namespace ApiTestProject.Controllers
 
         private readonly ICategoryRepository _categoryRepository;
 
-        public CategoriesController(IMapper mapper , ICategoryRepository categoryRepository) 
+        public CategoriesController(IMapper mapper, ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
-            _mapper = mapper;   
+            _mapper = mapper;
         }
 
         // GET: api/Categories
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Category>))]
-        public IActionResult GetCategories()
+        public async Task<IActionResult> GetCategories()
         {
-          if (_categoryRepository.GetCategories() == null)
-          {
-              return NotFound();
-          }
-          var categories = _categoryRepository.GetCategories();
-
-            return  Ok(categories);
+            var categories = await _categoryRepository.GetCategories();
+            if (!categories.Any())
+            {
+                return BadRequest("empty");
+            }
+            return Ok(categories);
         }
-
         // GET: api/Categories/5
         [HttpGet("{id}")]
         public IActionResult GetCategory(int id)
         {
-          if (_categoryRepository.GetCategories() == null)
-          {
-              return NotFound();
-          }
+            if (id == null)
+            {
+                return NotFound();
+            }
             var category = _categoryRepository.GetCategory(id);
             if (category == null)
             {
                 return NotFound();
             }
             return Ok(category);
+        }
+        [HttpDelete("{id}")]
+        [ProducesResponseType(200)]
+        public async Task<IActionResult> DeleteCategory(int id)
+        {
+            var deleteCategory = await _categoryRepository.DeleteCategory(id);
+            if(deleteCategory)
+            return Ok(deleteCategory);
+
+            return BadRequest("not deleted");
         }
 
         // PUT: api/Categories/5
