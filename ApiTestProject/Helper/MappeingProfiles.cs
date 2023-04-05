@@ -8,7 +8,10 @@ namespace ApiTestProject.Helper
     {
         public MappeingProfiles() 
         {
-            CreateMap<CategoryCreateDto,Category>();   
+            CreateMap<Category,CategoryCreateDto>();   
+            CreateMap<BlogPost,BlogPostDto> ()
+                .ForMember(destinaton => destinaton.CategoryName,opreation=>opreation.MapFrom(source=>source.Category.Name))
+                ;
         }
     }
 }

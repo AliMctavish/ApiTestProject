@@ -36,11 +36,12 @@ namespace ApiTestProject.Controllers
         public async Task<IActionResult> GetCategories()
         {
             var categories = await _categoryRepository.GetCategories();
+            var mapperResult = _mapper.Map<List<CategoryCreateDto>>(categories);
             if (!categories.Any())
             {
                 return BadRequest("empty");
             }
-            return Ok(categories);
+            return Ok(mapperResult);
         }
         // GET: api/Categories/5
         [HttpGet("{id}")]

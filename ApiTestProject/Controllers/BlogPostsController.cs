@@ -9,6 +9,10 @@ using ApiTestProject.Data;
 using ApiTestProject.Models;
 using ApiTestProject.Dtos.RequestDto;
 using System.Diagnostics;
+using ApiTestProject.Repository;
+using AutoMapper;
+using Microsoft.OpenApi.Writers;
+using ApiTestProject.Interfaces;
 
 namespace ApiTestProject.Controllers
 {
@@ -16,124 +20,88 @@ namespace ApiTestProject.Controllers
     [ApiController]
     public class BlogPostsController : ControllerBase
     {
-        private readonly DataContext _context;
 
-        public BlogPostsController(DataContext context)
+        private readonly IBlogPostRepository _blogPostRepository;
+        private readonly IMapper _mapper;
+       
+
+        public BlogPostsController(IBlogPostRepository blogPostRepository, IMapper mapper)
         {
-            _context = context;
+            _blogPostRepository = blogPostRepository;
+            _mapper = mapper;
         }
 
         // GET: api/BlogPosts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BlogPost>>> GetBlogPosts()
+        public async Task<IActionResult> GetBlogPosts()
         {
-          if (_context.Posts == null)
+          var blogPosts = await _blogPostRepository.GetBlogPosts();
+          var response = _mapper.Map<List<BlogPostDto>>(blogPosts);
+          if (!blogPosts.Any())
           {
               return BadRequest("empty");
           }
-          var blogPosts = await _context.Posts.ToListAsync();
-            Console.WriteLine(blogPosts);
-            return blogPosts;
+          return Ok(response);
         }
 
         // GET: api/BlogPosts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<BlogPost>> GetBlogPost(int id)
+        public async Task<IActionResult> GetBlogPost(int id)
         {
-          if (_context.Posts == null)
+          var blogPost = await _blogPostRepository.GetBlogPost(id);
+          if (blogPost == null)
           {
               return NotFound();
           }
-            var blogPost = await _context.Posts.FindAsync(id);
-
-            if (blogPost == null)
-            {
-                return NotFound();
-            }
-
-            return blogPost;
+          return Ok(blogPost);
         }
-
-        // PUT: api/Posts/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutBlogPost(int id, BlogPost blogPost)
+        //[HttpPost]
+        //public IActionResult CreateBlogPost(BlogPostDto blogPost)
         //{
-        //    if (id != blogPost.Id)
+        //    bool isIn = false;
+        //    var categories = _blogPostRepository.GetCategories();
+        //    foreach (var category in categories)
         //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(blogPost).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!BlogPostExists(id))
+        //        if (category.Id == blogPost.CategoryId)
         //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
+        //            isIn = true;
+        //            break;
         //        }
         //    }
+        //    if (!isIn)
+        //    {
+        //      return Problem("Entity set 'DataContext.category with id'  is null.");
+        //    }
+        //    var model  = _mapper.Map<BlogPost>(blogPost);
+
+            
+
+        //    return Ok(model);
+        //}
+
+        // DELETE: api/BlogPosts/5
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteBlogPost(int id)
+        //{
+        //    if (_context.Posts == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var blogPost = await _context.Posts.FindAsync(id);
+        //    if (blogPost == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    _context.Posts.Remove(blogPost);
+        //    await _context.SaveChangesAsync();
 
         //    return NoContent();
         //}
 
-        // POST: api/Posts
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<BlogPost>> PostBlogPost(BlogPostDto blogPost)
-        {
-            bool isIn = false;
-            foreach (var category in _context.Categories.ToList())
-            {
-                if (category.Id == blogPost.CategoryId)
-                {
-                    isIn = true;
-                    break;
-                }
-            }
-            if (_context.Categories.Where(x => x.Id == blogPost.CategoryId).SingleOrDefault() == null)
-            {
-              return Problem("Entity set 'DataContext.category with id'  is null.");
-          }
-            var model = new BlogPost() { title = blogPost.title, description = blogPost.description , CategoryId = blogPost.CategoryId};
-
-            _context.Posts.Add(model);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetBlogPost", new { id = model.Id }, blogPost);
-        }
-
-        // DELETE: api/BlogPosts/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBlogPost(int id)
-        {
-            if (_context.Posts == null)
-            {
-                return NotFound();
-            }
-            var blogPost = await _context.Posts.FindAsync(id);
-            if (blogPost == null)
-            {
-                return NotFound();
-            }
-
-            _context.Posts.Remove(blogPost);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool BlogPostExists(int id)
-        {
-            return (_context.Posts?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
+        //private bool BlogPostExists(int id)
+        //{
+        //    return (_context.Posts?.Any(e => e.Id == id)).GetValueOrDefault();
+        //}
     }
 }
