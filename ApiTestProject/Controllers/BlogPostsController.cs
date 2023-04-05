@@ -49,11 +49,13 @@ namespace ApiTestProject.Controllers
         public async Task<IActionResult> GetBlogPost(int id)
         {
           var blogPost = await _blogPostRepository.GetBlogPost(id);
+          var response = _mapper.Map<BlogPostDto>(blogPost);  
+
           if (blogPost == null)
           {
               return NotFound();
           }
-          return Ok(blogPost);
+          return Ok(response);
         }
         //[HttpPost]
         //public IActionResult CreateBlogPost(BlogPostDto blogPost)

@@ -6,11 +6,8 @@ namespace ApiTestProject.Interfaces
     {
         public Task<List<Category>> GetCategories();
         public Task<Category> GetCategory(int id);
-
       //  public Task<Category> CreateCategory();
-
         public Task<ICollection<BlogPost>> GetBlogPosts();
-
         public Task<bool> DeleteCategory(int id);
         bool isCategoryExist(int id);
     }
