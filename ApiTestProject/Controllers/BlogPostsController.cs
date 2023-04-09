@@ -37,13 +37,12 @@ namespace ApiTestProject.Controllers
         {
           var blogPosts = await _blogPostRepository.GetBlogPosts();
           var response = _mapper.Map<List<BlogPostDto>>(blogPosts);
-          if (!blogPosts.Any())
+          if(!blogPosts.Any())
           {
               return BadRequest("empty");
           }
           return Ok(response);
         }
-
         // GET: api/BlogPosts/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBlogPost(int id)
@@ -57,6 +56,16 @@ namespace ApiTestProject.Controllers
           }
           return Ok(response);
         }
+        //[HttpPost]
+        //[ProducesResponseType(204)]
+        //[ProducesResponseType(400)]
+
+        //public IActionResult CreateBlogPost()
+        //{
+        //    return;
+        //}
+
+
         //[HttpPost]
         //public IActionResult CreateBlogPost(BlogPostDto blogPost)
         //{

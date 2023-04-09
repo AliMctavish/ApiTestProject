@@ -69,6 +69,29 @@ namespace ApiTestProject.Controllers
             return BadRequest("not deleted");
         }
 
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+
+        public async Task<IActionResult> CreateCategory([FromBody] CategoryCreateDto categoryDto)
+        {
+            if (categoryDto == null)
+                return BadRequest(ModelState);
+
+            var category = _categoryRepository.GetCategories().Result.Where(x => x.Name.Trim().ToUpper() == categoryDto.name.TrimEnd().ToUpper()).FirstOrDefault();
+
+            if (category != null)
+                return BadRequest("this category already exist");
+
+            var mappingData = _mapper.Map<Category>(categoryDto);
+
+            _categoryRepository.CreateCategory(mappingData);
+
+            Debug.WriteLine(mappingData);
+
+            return Ok("You just created a category ! ");
+        }
+
         // PUT: api/Categories/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         //[HttpPut("{id}")]

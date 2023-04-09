@@ -28,7 +28,7 @@ namespace ApiTestProject.Repository
 
         public async Task<BlogPost> GetBlogPost(int id)
         {
-            var blogPost = await _context.Posts.FindAsync(id);
+            var blogPost = await _context.Posts.Include(x=>x.Category).SingleOrDefaultAsync(x=>x.Id == id);
             return blogPost;
         }
 
@@ -36,9 +36,16 @@ namespace ApiTestProject.Repository
         public async Task<BlogPost> CreateBlogPost()
         {
             BlogPost blogPost = new BlogPost();
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return blogPost;
         }
+
+
+        public bool Save()
+        {
+            return false;
+        }
+
     
         Task IBlogPostRepository.DeleteBlogPost(int id)
         {

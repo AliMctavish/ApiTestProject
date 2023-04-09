@@ -7,19 +7,13 @@ using System.Xml;
 
 namespace ApiTestProject.Repository
 {
-    public class CategoryRepository : ICategoryRepository   
+    public class CategoryRepository :  ICategoryRepository   
     {
         private readonly DataContext _context;
         public CategoryRepository(DataContext context) 
         {
             _context = context;
         }
-
-        //public async Task<Category> CreateCategory(CategoryCreateDto categoryDto)
-        //{
-        //    var model = new Category() { }
-        //    return await _context.Categories.Add();
-        //}
         public async Task<List<Category>> GetCategories()
         {
            var list = await _context.Categories.ToListAsync();    
@@ -52,6 +46,16 @@ namespace ApiTestProject.Repository
             return false;
         }
 
-  
+        public bool CreateCategory(Category category)
+        {
+            _context.Add(category);
+            return Save();
+        }
+        public bool Save()  
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
+        }
+
     }
 }
