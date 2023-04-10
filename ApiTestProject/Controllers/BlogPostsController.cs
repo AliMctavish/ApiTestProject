@@ -83,6 +83,15 @@ namespace ApiTestProject.Controllers
             return Ok("تم انشاء منشور جديد");
         }
 
+        public async Task<IActionResult> UpdateBlogPost(BlogPostDto blogPostDto)
+        {
+            var blogPostMapper =  _mapper.Map<BlogPost>(blogPostDto);
+            
+            _blogPostRepository.UpdateBlogPost(blogPostMapper);
+
+            return Ok("تم التعديل على المنشور بنجاح");
+        }
+
         [HttpDelete]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
