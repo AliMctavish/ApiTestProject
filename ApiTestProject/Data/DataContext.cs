@@ -11,18 +11,11 @@ namespace ApiTestProject.Data
         {
 
         }
-
-
         public DbSet<User> Users { get; set; }
-
         public DbSet<Category> Categories { get; set; }
-
         public DbSet<BlogPost> Posts { get; set; }
-
         //protected override void OnModelCreation(ModelBuilder builder)
         //{
-            
-
         //}
     }
 }

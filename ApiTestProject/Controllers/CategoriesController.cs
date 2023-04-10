@@ -82,14 +82,23 @@ namespace ApiTestProject.Controllers
 
             if (category != null)
                 return BadRequest("this category already exist");
-
-            var mappingData = _mapper.Map<Category>(categoryDto);
-
+            var mappingData =  _mapper.Map<Category>(categoryDto);
             _categoryRepository.CreateCategory(mappingData);
+            return Ok("You just created a category !");
+        }
 
-            Debug.WriteLine(mappingData);
 
-            return Ok("You just created a category ! ");
+
+        [HttpPut]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public IActionResult UpdateCategory(CategoryUpdateDto updateDto)
+        {
+            var mappedCategory = _mapper.Map<Category>(updateDto);
+
+            _categoryRepository.UpdateCategory(mappedCategory);
+
+            return Ok();
         }
 
         // PUT: api/Categories/5

@@ -23,7 +23,7 @@ namespace ApiTestProject.Controllers
 
         private readonly IBlogPostRepository _blogPostRepository;
         private readonly IMapper _mapper;
-       
+
 
         public BlogPostsController(IBlogPostRepository blogPostRepository, IMapper mapper)
         {
@@ -35,84 +35,68 @@ namespace ApiTestProject.Controllers
         [HttpGet]
         public async Task<IActionResult> GetBlogPosts()
         {
-          var blogPosts = await _blogPostRepository.GetBlogPosts();
-          var response = _mapper.Map<List<BlogPostDto>>(blogPosts);
-          if(!blogPosts.Any())
-          {
-              return BadRequest("empty");
-          }
-          return Ok(response);
+            var blogPosts = await _blogPostRepository.GetBlogPosts();
+            var response = _mapper.Map<List<BlogPostDto>>(blogPosts);
+            if (!blogPosts.Any())
+            {
+                return BadRequest("empty");
+            }
+            return Ok(response);
         }
         // GET: api/BlogPosts/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBlogPost(int id)
         {
-          var blogPost = await _blogPostRepository.GetBlogPost(id);
-          var response = _mapper.Map<BlogPostDto>(blogPost);  
-
-          if (blogPost == null)
-          {
-              return NotFound();
-          }
-          return Ok(response);
+            var blogPost = await _blogPostRepository.GetBlogPost(id);
+            var response = _mapper.Map<BlogPostDto>(blogPost);
+            if (blogPost == null)
+            {
+                return NotFound();
+            }
+            return Ok(response);
         }
-        //[HttpPost]
-        //[ProducesResponseType(204)]
-        //[ProducesResponseType(400)]
 
-        //public IActionResult CreateBlogPost()
-        //{
-        //    return;
-        //}
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> CreateBlogPost(CreateBlogPostDto blogPostDto)
+        {
+            if (blogPostDto == null)
+            {
+                BadRequest(ModelState);
+            }
 
+            var blogPost = _blogPostRepository.GetBlogPosts().Result.Where(x => x.title.Trim().ToUpper() == blogPostDto.title.TrimEnd().ToUpper()).FirstOrDefault();
 
-        //[HttpPost]
-        //public IActionResult CreateBlogPost(BlogPostDto blogPost)
-        //{
-        //    bool isIn = false;
-        //    var categories = _blogPostRepository.GetCategories();
-        //    foreach (var category in categories)
-        //    {
-        //        if (category.Id == blogPost.CategoryId)
-        //        {
-        //            isIn = true;
-        //            break;
-        //        }
-        //    }
-        //    if (!isIn)
-        //    {
-        //      return Problem("Entity set 'DataContext.category with id'  is null.");
-        //    }
-        //    var model  = _mapper.Map<BlogPost>(blogPost);
+            if (blogPost != null)
+            {
+                return BadRequest("this post is already exist with the same name");
+            }
 
-            
+            var blogPostMapped = _mapper.Map<BlogPost>(blogPostDto);
 
-        //    return Ok(model);
-        //}
+            if (!_blogPostRepository.CreateBlogPost(blogPostMapped))
+            {
+                ModelState.AddModelError("status", "something went wrong while saving");
+                return StatusCode(500, ModelState);
+            }
+            return Ok("تم انشاء منشور جديد");
+        }
 
-        // DELETE: api/BlogPosts/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteBlogPost(int id)
-        //{
-        //    if (_context.Posts == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var blogPost = await _context.Posts.FindAsync(id);
-        //    if (blogPost == null)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpDelete]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> DeleteBlogPost(int id)
+        {
+            if(id == null)
+                return NotFound();
 
-        //    _context.Posts.Remove(blogPost);
-        //    await _context.SaveChangesAsync();
+            var blogPost = await _blogPostRepository.DeleteBlogPost(id);
 
-        //    return NoContent();
-        //}
+            if (blogPost == false)
+                return BadRequest("no such a post exist in database");
 
-        //private bool BlogPostExists(int id)
-        //{
-        //    return (_context.Posts?.Any(e => e.Id == id)).GetValueOrDefault();
-        //}
+            return Ok("post deleted");
+        }
     }
 }

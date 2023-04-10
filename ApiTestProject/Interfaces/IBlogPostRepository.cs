@@ -6,12 +6,10 @@ namespace ApiTestProject.Interfaces
     {
         public  Task<List<BlogPost>> GetBlogPosts();
         public Task<BlogPost> GetBlogPost(int id);
-       // public Task<BlogPost> CreateBlogPost();
-
-        public Task<BlogPost> UpdateBlogPost(int id);
-
-        public Task DeleteBlogPost(int id);
-
-        public bool isBlogPostExist(int id);
+        bool UpdateBlogPost(BlogPost blogPost);
+        bool  CreateBlogPost(BlogPost blogPost);
+        //public bool isBlogPostExist(int id);
+        
+        Task<bool> DeleteBlogPost(int id);
     }
 }

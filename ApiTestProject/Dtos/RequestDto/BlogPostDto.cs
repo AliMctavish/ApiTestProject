@@ -8,6 +8,5 @@ namespace ApiTestProject.Dtos.RequestDto
         public string description { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set;}
-
     }
 }

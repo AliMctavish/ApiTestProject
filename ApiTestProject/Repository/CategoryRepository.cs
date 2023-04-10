@@ -31,15 +31,23 @@ namespace ApiTestProject.Repository
             return blogPost;
         }
         public async Task<bool> DeleteCategory(int id)
-        {
+        {   
             var category = await _context.Categories.SingleOrDefaultAsync(x => x.Id == id);
 
+            if (category != null)
+            {
             _context.Categories.Remove(category);
+            _context.SaveChanges();
+                return true;
+            }
 
-            var result = _context.SaveChanges();
 
-
-            return true;
+            return false;
+        }
+        public bool UpdateCategory(Category category)
+        {
+            _context.Update(category);
+            return Save();
         }
         public bool isCategoryExist(int id)
         {

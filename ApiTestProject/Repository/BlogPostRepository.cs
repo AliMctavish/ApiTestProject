@@ -25,43 +25,43 @@ namespace ApiTestProject.Repository
             return  _context.Categories.ToList();
         }
 
-
         public async Task<BlogPost> GetBlogPost(int id)
         {
             var blogPost = await _context.Posts.Include(x=>x.Category).SingleOrDefaultAsync(x=>x.Id == id);
             return blogPost;
         }
 
-
-        public async Task<BlogPost> CreateBlogPost()
+        public bool CreateBlogPost(BlogPost blogPost)
         {
-            BlogPost blogPost = new BlogPost();
-            await _context.SaveChangesAsync();
-            return blogPost;
+            var categoryExist = _context.Categories.Where(x => x.Id == blogPost.CategoryId);
+            
+            if (!categoryExist.Any())
+                return false;
+
+            _context.Add(blogPost);
+            return Save();
         }
+        public async Task<bool> DeleteBlogPost(int id)
+        {
+            var blogPost = await _context.Posts.Where(x => x.Id == id).SingleOrDefaultAsync();
 
+            if(blogPost != null)
+            {
+            _context.Posts.Remove(blogPost);
+            return true;
+            }
 
+            return  false;
+        }
+        public bool UpdateBlogPost(BlogPost blogPost)
+        {
+            _context.Update(blogPost);
+            return Save();
+        }
         public bool Save()
         {
-            return false;
-        }
-
-    
-        Task IBlogPostRepository.DeleteBlogPost(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-
-
-        bool IBlogPostRepository.isBlogPostExist(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<BlogPost> IBlogPostRepository.UpdateBlogPost(int id)
-        {
-            throw new NotImplementedException();
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
         }
     }
 }
