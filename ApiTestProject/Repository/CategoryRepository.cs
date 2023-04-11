@@ -33,15 +33,12 @@ namespace ApiTestProject.Repository
         public async Task<bool> DeleteCategory(int id)
         {   
             var category = await _context.Categories.SingleOrDefaultAsync(x => x.Id == id);
-
             if (category != null)
             {
             _context.Categories.Remove(category);
             _context.SaveChanges();
                 return true;
             }
-
-
             return false;
         }
         public bool UpdateCategory(Category category)
