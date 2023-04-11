@@ -5,17 +5,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ApiTestProject.Data
 {
-    public class DataContext :  IdentityDbContext
+    public class DataContext : IdentityDbContext
     {
-        public DataContext(DbContextOptions<DataContext> options): base(options)
+        public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
 
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<BlogPost> Posts { get; set; }
-        //protected override void OnModelCreation(ModelBuilder builder)
-        //{
-        //}
+
+
     }
 }
