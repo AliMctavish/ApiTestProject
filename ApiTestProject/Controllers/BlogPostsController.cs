@@ -13,6 +13,7 @@ using ApiTestProject.Repository;
 using AutoMapper;
 using Microsoft.OpenApi.Writers;
 using ApiTestProject.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApiTestProject.Controllers
 {

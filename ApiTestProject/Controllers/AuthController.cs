@@ -22,10 +22,11 @@ namespace ApiTestProject.Controllers
 
 
         public static User user = new User();
+
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserDto userDto)
         {
-            CreatePasswordHash(userDto.password , out byte[] passwordHash , out byte[] passwordSalt);
+            CreatePasswordHash(userDto.password ,out byte[] passwordHash ,out byte[] passwordSalt);
 
             user.Name = userDto.Name;
             user.PasswordHash = passwordHash;
