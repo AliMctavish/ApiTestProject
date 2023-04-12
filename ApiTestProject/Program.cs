@@ -30,11 +30,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseStaticFiles();
-
-app.UseForwardedHeaders(new ForwardedHeadersOptions){
-
-}
+//app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 
