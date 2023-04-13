@@ -1,5 +1,6 @@
 ﻿using ApiTestProject.Dtos.UserDto;
 using ApiTestProject.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -22,7 +23,6 @@ namespace ApiTestProject.Controllers
 
 
         public static User user = new User();
-
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserDto userDto)
         {
@@ -55,7 +55,7 @@ namespace ApiTestProject.Controllers
 
             return jwt;
         }
-
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserDto userDto)
         {

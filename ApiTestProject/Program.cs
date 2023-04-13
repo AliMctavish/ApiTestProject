@@ -4,6 +4,8 @@ using ApiTestProject.Controllers;
 using ApiTestProject.Interfaces;
 using ApiTestProject.Repository;
 using ApiTestProject;
+using ApiTestProject.Models;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 });
 
 builder.Services.AddSwaggerGen();
+builder.Services.AddIdentityCore<User>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
@@ -34,7 +37,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
+
 app.UseAuthorization();
+
+
+app.UseAuthentication();
 
 app.MapControllers();
 
