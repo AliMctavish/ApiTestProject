@@ -33,7 +33,7 @@ namespace ApiTestProject.Controllers
         }
 
         // GET: api/BlogPosts
-        [Authorize]
+        //[Authorize]
         [HttpGet]
         public async Task<IActionResult> GetBlogPosts()
         {

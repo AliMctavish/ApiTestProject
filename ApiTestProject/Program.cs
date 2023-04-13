@@ -19,7 +19,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 });
 
 builder.Services.AddSwaggerGen();
-builder.Services.AddIdentityCore<User>();
+//builder.Services.AddIdentityCore<User>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
@@ -35,9 +35,12 @@ if (app.Environment.IsDevelopment())
 
 //app.UseStaticFiles();
 
+
+
 app.UseHttpsRedirection();
 
 app.UseRouting();
+
 
 app.UseAuthorization();
 
