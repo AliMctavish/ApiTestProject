@@ -11,6 +11,7 @@ using ApiTestProject.Dtos.RequestDto;
 using System.Diagnostics;
 using ApiTestProject.Repository;
 using AutoMapper;
+using ILogger = NLog.ILogger;
 using Microsoft.OpenApi.Writers;
 using ApiTestProject.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -24,12 +25,14 @@ namespace ApiTestProject.Controllers
 
         private readonly IBlogPostRepository _blogPostRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger _logger;
 
 
-        public BlogPostsController(IBlogPostRepository blogPostRepository, IMapper mapper)
+        public BlogPostsController(IBlogPostRepository blogPostRepository, IMapper mapper , ILogger logger) 
         {
             _blogPostRepository = blogPostRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
         // GET: api/BlogPosts
@@ -73,6 +76,7 @@ namespace ApiTestProject.Controllers
             if (blogPost != null)
             {
                 return BadRequest("this post is already exist with the same name");
+                _logger.Warn("there is something wrong with your app ! ");
             }
 
             var blogPostMapped = _mapper.Map<BlogPost>(blogPostDto);

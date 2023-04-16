@@ -16,8 +16,7 @@ namespace ApiTestProject.Repository
 
         public async Task<List<BlogPost>> GetBlogPosts()
         {
-            var blogPosts = await _context.Posts.Include(x=>x.Category).OrderBy(X => X.Id).ToListAsync();
-            return blogPosts;
+            return await _context.Posts.Include(x=>x.Category).OrderBy(X => X.Id).ToListAsync();
         }
 
         public  List<Category> GetCategories()
