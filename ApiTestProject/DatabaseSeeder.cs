@@ -18,10 +18,10 @@ namespace ApiTestProject
             {
                 var categories = new List<Category>()
                 {
-                    new Category { Name = "قسم السياسة", Id = 1 },
-                    new Category { Name = "قسم الرياضة", Id = 2 },
-                    new Category { Name = "قسم العلوم", Id = 3 },
-                    new Category { Name = "قسم التاريخ", Id = 4 },
+                    new Category { Name = "قسم الصيانة", Id = 1 },
+                    new Category { Name = "قسم الحاسبات", Id = 2 },
+                    new Category { Name = "قسم الشاشات", Id = 3 },
+                    new Category { Name = "قسم المواد الانشائية", Id = 4 },
                 };
 
                 var users = new List<User>()

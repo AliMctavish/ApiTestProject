@@ -11,7 +11,6 @@ using ApiTestProject.Dtos.RequestDto;
 using System.Diagnostics;
 using ApiTestProject.Repository;
 using AutoMapper;
-using ILogger = NLog.ILogger;
 using Microsoft.OpenApi.Writers;
 using ApiTestProject.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -25,10 +24,10 @@ namespace ApiTestProject.Controllers
 
         private readonly IBlogPostRepository _blogPostRepository;
         private readonly IMapper _mapper;
-        private readonly ILogger _logger;
+        private readonly ILoggerManager _logger;
 
 
-        public BlogPostsController(IBlogPostRepository blogPostRepository, IMapper mapper , ILogger logger) 
+        public BlogPostsController(IBlogPostRepository blogPostRepository, IMapper mapper , ILoggerManager logger) 
         {
             _blogPostRepository = blogPostRepository;
             _mapper = mapper;
@@ -75,8 +74,8 @@ namespace ApiTestProject.Controllers
 
             if (blogPost != null)
             {
+                _logger.LogInfo("someone is trying to create an object with the same name ! ");
                 return BadRequest("this post is already exist with the same name");
-                _logger.Warn("there is something wrong with your app ! ");
             }
 
             var blogPostMapped = _mapper.Map<BlogPost>(blogPostDto);
@@ -86,7 +85,7 @@ namespace ApiTestProject.Controllers
                 ModelState.AddModelError("status", "something went wrong while saving");
                 return StatusCode(500, ModelState);
             }
-            return Ok("تم انشاء منشور جديد");
+            return Ok("تم انشاء منتج جديد");
         }
         [HttpPut]
         [ProducesResponseType(204)]
@@ -96,8 +95,8 @@ namespace ApiTestProject.Controllers
             var blogPostMapper =  _mapper.Map<BlogPost>(blogPostDto);
             
             _blogPostRepository.UpdateBlogPost(blogPostMapper);
-
-            return Ok("تم التعديل على المنشور بنجاح");
+            _logger.LogWarn("the user is updating the post");
+            return Ok("تم التعديل على المنتج بنجاح");
         }
 
         [HttpDelete]
@@ -111,9 +110,9 @@ namespace ApiTestProject.Controllers
             var blogPost = await _blogPostRepository.DeleteBlogPost(id);
 
             if (blogPost == false)
-                return BadRequest("no such a post exist in database");
+                return BadRequest("no such a product exist in database");
 
-            return Ok("post deleted");
+            return Ok("product deleted");
         }
     }
 }

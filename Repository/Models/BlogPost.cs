@@ -1,5 +1,4 @@
-﻿using ApiTestProject.Data;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ApiTestProject.Models
 {
